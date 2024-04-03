@@ -1,21 +1,53 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Onboarding from "./pages/Onboarding/Onboarding";
+import Signin from "./pages/Signin/Signin";
+import Signup from "./pages/Signup/Signup";
+import Home from "./pages/Home/Home";
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Smarthome 123!!</Text>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Onboarding"
+          component={Onboarding}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Signin"
+          component={Signin}
+          options={{
+            title: "Sign In",
+            headerStyle: {
+              backgroundColor: "#E5E5E5",
+            },
+            headerTintColor: "rgba(152, 94, 225, 1)",
+          }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{
+            title: "Sign Up",
+            headerStyle: {
+              backgroundColor: "#E5E5E5",
+            },
+            headerTintColor: "rgba(152, 94, 225, 1)",
+          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
