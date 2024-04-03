@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { BottomSheet, ListItem } from "@rneui/themed";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { useNavigation } from "@react-navigation/native";
 import Feather from "@expo/vector-icons/Feather";
 function BottomSheetComponent() {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,6 +15,7 @@ function BottomSheetComponent() {
       onPress: () => setIsVisible(false),
     },
   ];
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -24,7 +24,10 @@ function BottomSheetComponent() {
           <Feather name="home" size={27} color="#8e44ad" style={styles.icon} />
           <Text style={styles.title}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.wrapperIcon}>
+        <TouchableOpacity
+          style={styles.wrapperIcon}
+          onPress={() => navigation.navigate("Register")}
+        >
           <Feather name="camera" size={28} color="white" style={styles.icon} />
           <Text style={styles.title}>Register</Text>
         </TouchableOpacity>

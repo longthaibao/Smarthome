@@ -5,6 +5,7 @@ import Onboarding from "./pages/Onboarding/Onboarding";
 import Signin from "./pages/Signin/Signin";
 import Signup from "./pages/Signup/Signup";
 import Home from "./pages/Home/Home";
+import Register from "./pages/Register/Register";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -43,6 +44,13 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
           options={{
             headerShown: false,
           }}
