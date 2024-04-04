@@ -31,7 +31,7 @@ function Home() {
         <Image source={familyMember.image[0]} style={styles.imageAccess} />
       </View>
       <View style={styles.bottomsheet}>
-        <BottomSheetComponent />
+        <BottomSheetComponent active={1} />
       </View>
     </View>
   );

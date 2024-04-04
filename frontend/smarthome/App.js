@@ -6,6 +6,8 @@ import Signin from "./pages/Signin/Signin";
 import Signup from "./pages/Signup/Signup";
 import Home from "./pages/Home/Home";
 import Register from "./pages/Register/Register";
+import OpenDoor from "./pages/OpenDoor/OpenDoor";
+import RegisterFace from "./pages/Register/RegisterFace";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -51,6 +53,20 @@ export default function App() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="RegisterFace"
+          component={RegisterFace}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="OpenDoor"
+          component={OpenDoor}
           options={{
             headerShown: false,
           }}

@@ -3,7 +3,7 @@ import { BottomSheet, ListItem } from "@rneui/themed";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Feather from "@expo/vector-icons/Feather";
-function BottomSheetComponent() {
+function BottomSheetComponent({ active }) {
   const [isVisible, setIsVisible] = useState(false);
   const list = [
     { title: "List Item 1" },
@@ -20,24 +20,58 @@ function BottomSheetComponent() {
   return (
     <View style={styles.container}>
       <View style={styles.navigatorbottom}>
-        <TouchableOpacity style={styles.wrapperIcon}>
-          <Feather name="home" size={27} color="#8e44ad" style={styles.icon} />
-          <Text style={styles.title}>Home</Text>
+        <TouchableOpacity
+          style={styles.wrapperIcon}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Feather
+            name="home"
+            size={27}
+            color={active == 1 ? "#8e44ad" : "white"}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, active === 1 && styles.active]}>
+            Home
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.wrapperIcon}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("RegisterFace")}
         >
-          <Feather name="camera" size={28} color="white" style={styles.icon} />
-          <Text style={styles.title}>Register</Text>
+          <Feather
+            name="camera"
+            size={28}
+            color={active == 2 ? "#8e44ad" : "white"}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, active === 2 && styles.active]}>
+            Register
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.wrapperIcon}
+          onPress={() => navigation.navigate("OpenDoor")}
+        >
+          <Feather
+            name="airplay"
+            size={28}
+            color={active == 3 ? "#8e44ad" : "white"}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, active === 3 && styles.active]}>
+            Access
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.wrapperIcon}>
-          <Feather name="airplay" size={28} color="white" style={styles.icon} />
-          <Text style={styles.title}>Access</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.wrapperIcon}>
-          <Feather name="user" size={28} color="white" style={styles.icon} />
-          <Text style={styles.title}>Profile</Text>
+          <Feather
+            name="user"
+            size={28}
+            color={active == 4 ? "#8e44ad" : "white"}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, active === 4 && styles.active]}>
+            Profile
+          </Text>
         </TouchableOpacity>
       </View>
       <BottomSheet modalProps={{}} isVisible={isVisible}>
@@ -77,8 +111,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   title: {
-    color: "white",
     fontSize: 12,
+    color: "white",
+  },
+  active: {
+    color: "#8e44ad",
   },
 });
 

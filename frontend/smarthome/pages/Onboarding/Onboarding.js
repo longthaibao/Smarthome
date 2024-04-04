@@ -27,7 +27,7 @@ function Onboarding() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.buttonSignin2}
-          onPress={() => console.log("Sign in")}
+          onPress={() => navigation.navigate("Signup")}
         >
           <Text style={styles.textButton}>
             Here for the first time?
