@@ -61,7 +61,6 @@ function CameraRegister() {
       navigation.navigate("Register", { photo: photo });
       setPhoto(undefined);
     };
-
     return (
       <SafeAreaView style={styles.container}>
         <Image
