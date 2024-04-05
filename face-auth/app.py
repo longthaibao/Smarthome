@@ -47,9 +47,9 @@ async def verify(images: VerifData) -> VerifResult:
                 logger.info(f"Result: recognized, verif_id={images.verif_id}, user_id={reference.user_id}")
                 return VerifResult(user_id=reference.user_id)
             else:
-                logger.info(f"Result: unrecognized. verif_id={images.verif_id})")
+                logger.info(f"Result: unrecognized. verif_id={images.verif_id}, user_id={reference.user_id})")
         except ValueError as e:
-            logger.error(f"An error occurred when verifying against user_id={reference.user_id}, Reason: {e}")
+            logger.error(f"An error occurred. verif_id={images.verif_id}, user_id={reference.user_id}, Reason: {e}")
             continue
 
     
