@@ -15,3 +15,10 @@ router.put("/member/extend/:id", memberCtrl.apiExtendmember);
 // IOT router
 router.get("/IOT/lastAuthorization", IOTCtrl.apiLastAuthorizationIOT);
 router.get("/IOT/open", IOTCtrl.apiOpenIOT);
+
+
+## How to run face-auth
+- Go to face-auth: cd face-auth
+- Create python virtual environment: python3 -m venv .env
+- Install dependencies: pip install -r requirements.txt
+- Run the app: uvicorn app:app
