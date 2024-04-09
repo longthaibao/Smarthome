@@ -1,6 +1,8 @@
 // requiring database
 require("./mongoDB/config");
 require("dotenv").config();
+require("./config/DBconfig");
+require('dotenv').config();
 
 // error
 const AppError = require("./helpers/appError");
@@ -18,6 +20,11 @@ const port = process.env.port;
 const upload = multer();
 //config API routes;
 app.use(cors());
+
+
+
+//config API routes;  
+app.use(cors())
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(router);

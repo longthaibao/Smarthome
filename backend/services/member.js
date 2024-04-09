@@ -9,9 +9,9 @@ module.exports = class memberService{
                 sex: data.sex,
                 relationship: data.relationship,
                 age : data.age,
-                dateStart: new Date(data.dateStart),
-                dateEnd: new Date(data.dateEnd),
-                active: [new Date("2024-04-01T15:18:52.197+00:00"), new Date("2024-04-01T15:18:52.197+00:00")]
+                dateStart: data.dateStart,
+                dateEnd: data.dateEnd,
+                active: []
             }
             console.log(newmember)
            const response = await new member(newmember).save();
