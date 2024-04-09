@@ -26,7 +26,7 @@ function BottomSheetComponent({ active }) {
         >
           <Feather
             name="home"
-            size={27}
+            size={28}
             color={active == 1 ? "#8e44ad" : "white"}
             style={styles.icon}
           />
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   wrapperIcon: {
     marginBottom: 40,
     marginTop: 20,
+    alignItems: "center",
   },
   title: {
     fontSize: 12,

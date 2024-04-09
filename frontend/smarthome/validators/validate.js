@@ -16,12 +16,10 @@ export const validatePassword = (password) => {
   }
   return errors;
 };
-export const validatePincode = (pincode) => {
+export const validateName = (fullname) => {
   const errors = {};
-  if (!pincode) {
-    errors.pincode = "Pincode is required";
-  } else if (pincode.length !== 6) {
-    errors.pincode = "Pincode must be 6 characters";
+  if (!fullname) {
+    errors.fullname = "Fullname is required";
   }
   return errors;
 };

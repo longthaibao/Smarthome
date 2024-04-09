@@ -1,12 +1,20 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Vector from "../../assets/Vector.png";
+import { useNavigation } from "@react-navigation/native";
+
 function Header({ title }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.headerTitle}>{title}</Text>
       <View style={styles.logo}>
-        <Ionicons name="logo-electron" size={32} color="#8e44ad" />
+        <Ionicons
+          name="logo-electron"
+          size={32}
+          color="#8e44ad"
+          onPress={() => navigation.navigate("Onboarding")}
+        />
       </View>
     </View>
   );

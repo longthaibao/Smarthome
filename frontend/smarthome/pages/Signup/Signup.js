@@ -9,26 +9,27 @@ import {
 import {
   validateEmail,
   validatePassword,
-  validatePincode,
+  validateName,
 } from "../../validators/validate.js";
 import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 function Signup() {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
-  const [pincode, onChangePincode] = useState("");
+  const [fullname, onChangeFullname] = useState("");
   const [checked, setChecked] = useState(false);
   const [errorMessageEmail, setErrorMessageEmail] = useState("");
   const [displayErrorEmail, setDisplayErrorEmail] = useState("none");
   const [errorMessagePassword, setErrorMessagePassword] = useState("");
   const [displayErrorPassword, setDisplayErrorPassword] = useState("none");
-  const [errorMessagePincode, setErrorMessagePincode] = useState("");
-  const [displayErrorPincode, setDisplayErrorPincode] = useState("none");
+  const [errorMessageName, setErrorMessageName] = useState("");
+  const [displayErrorName, setDisplayErrorName] = useState("none");
   const navigation = useNavigation();
   const handleBlur = () => {
     const errors = validateEmail(email);
     const errorsPassword = validatePassword(password);
-    const errorsPincode = validatePincode(pincode);
+    const errorsName = validateName(fullname);
     if (errors.email) {
       setErrorMessageEmail(errors.email);
       setDisplayErrorEmail("flex");
@@ -43,22 +44,37 @@ function Signup() {
       setErrorMessagePassword("");
       setDisplayErrorPassword("none");
     }
-    if (errorsPincode.pincode) {
-      setErrorMessagePincode(errorsPincode.pincode);
-      setDisplayErrorPincode("flex");
+    if (errorsName.fullname) {
+      setErrorMessageName(errorsName.fullname);
+      setDisplayErrorName("flex");
     } else {
-      setErrorMessagePincode("");
-      setDisplayErrorPincode("none");
+      setErrorMessageName("");
+      setDisplayErrorName("none");
     }
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !errorMessageEmail &&
       !errorMessagePassword &&
-      !errorMessagePincode &&
+      !errorMessageName &&
       checked
     ) {
-      navigation.navigate("Home");
+      const data = new FormData();
+      data.append("email", email);
+      data.append("password", password);
+      data.append("fullname", fullname);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/admin/register",
+          data
+        );
+        if (response.status === 200) {
+          console.log(data);
+          navigation.navigate("Signin");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   return (
@@ -117,27 +133,27 @@ function Signup() {
           </Text>
         </View>
         <View>
-          <Text style={styles.label}>Pin Code</Text>
+          <Text style={styles.label}>Fullname</Text>
           <TextInput
-            placeholder="Pin code"
+            placeholder="Your fullname"
             style={styles.email}
             secureTextEntry="true"
-            onChangeText={onChangePincode}
+            onChangeText={onChangeFullname}
             autoCompleteType="off"
             onBlur={handleBlur}
             onFocus={() => {
-              setDisplayErrorPincode("none");
-              setErrorMessagePincode("");
+              setDisplayErrorName("none");
+              setErrorMessageName("");
             }}
           />
           <Text
             style={{
-              display: displayErrorPincode,
+              display: displayErrorName,
               margin: 10,
               color: "rgba(242, 86, 86, 1)",
             }}
           >
-            {errorMessagePincode}
+            {errorMessageName}
           </Text>
         </View>
         <TouchableOpacity>

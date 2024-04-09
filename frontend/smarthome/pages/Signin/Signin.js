@@ -40,7 +40,10 @@ function Signin() {
         <TouchableOpacity>
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonSubmit}>
+        <TouchableOpacity
+          style={styles.buttonSubmit}
+          onPress={() => navigation.navigate("Home")}
+        >
           <Text style={styles.contentButton}>Sign In</Text>
         </TouchableOpacity>
       </View>
