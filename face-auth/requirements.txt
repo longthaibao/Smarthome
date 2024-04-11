@@ -1,3 +1,0 @@
-deepface
-fastapi
-numpy
