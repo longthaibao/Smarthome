@@ -53,7 +53,7 @@ async def deregister(data: DeregisterBody):
     ImageVerification.deregister(data.master_id, data.member_id)
 
 @app.post("/verify")
-async def verify(master_id: Annotated[str, Form()], member_id: Annotated[str, Form()], image: UploadFile):
+async def verify(master_id: Annotated[str, Form()], image: UploadFile):
     raw_img = await image.read()
     preprocessed_img = ImageManager.preprocess(raw_img)
     verif_result = ImageVerification.verify(master_id, preprocessed_img)
