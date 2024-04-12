@@ -1,0 +1,8 @@
+deepface
+fastapi
+numpy
+multipart
+uvicorn
+tf-keras
+aiohttp
+python-multipart
