@@ -3,6 +3,7 @@ import Header from "../../components/Header/Header";
 import BottomSheetComponent from "../../components/BottomSheet/BottomSheet";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Button } from "@rneui/themed";
+import axios from "axios";
 
 function OpenDoor() {
   const image = [
@@ -10,6 +11,17 @@ function OpenDoor() {
       uri: "https://images.unsplash.com/photo-1620067925093-801122ac1408?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvdG8lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D",
     },
   ];
+  const handleOpenDoor = async () => {
+    try {
+      // Gửi yêu cầu POST lên server
+      const response = await axios.get("http://localhost:8080/IOT/open");
+      if (response.status === 200) {
+        alert("Open Door Successfully!");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <Header title={"Open Door"} />
@@ -35,6 +47,7 @@ function OpenDoor() {
             borderColor: "rgb(250, 173, 20)",
           }}
           titleStyle={{ color: "rgb(250, 173, 20)", fontWeight: "bold" }}
+          onPress={handleOpenDoor}
         >
           Open Door
         </Button>

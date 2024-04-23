@@ -66,7 +66,7 @@ function Signup() {
       try {
         const response = await axios.post(
           "http://localhost:8080/admin/register",
-          data
+          { fullname: fullname, password: password, email: email }
         );
         if (response.status === 200) {
           console.log(data);

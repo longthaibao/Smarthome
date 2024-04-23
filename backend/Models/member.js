@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const memberSchema = Schema(
   {
-    name: { 
+    name: {
       type: String,
       required: true,
     },
@@ -11,26 +11,26 @@ const memberSchema = Schema(
       type: String,
       required: true,
     },
-    sex: { 
-      type: Boolean
+    sex: {
+      type: String,
     },
-    relationship: { 
-        type: String,
-        required: true,
+    relationship: {
+      type: String,
+      required: true,
     },
-    age: { 
-        type: Number
+    age: {
+      type: Number,
     },
-    dateStart: { 
-        type: Date,
-        required: true,
+    dateStart: {
+      type: Date,
+      required: true,
     },
-    dateEnd: { 
-        type: Date
+    dateEnd: {
+      type: Date,
     },
-    active: { 
-        type: [Date]
-    }    
+    active: {
+      type: [Date],
+    },
   },
   { timestamps: true }
 );

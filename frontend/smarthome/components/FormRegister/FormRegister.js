@@ -3,6 +3,9 @@ import { Text, View, StyleSheet, TextInput } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Button, CheckBox } from "@rneui/themed";
+import axios from "axios";
+import * as FileSystem from "expo-file-system";
+import { Platform } from "react-native";
 
 function FormRegister({ picture }) {
   const age = Array.from({ length: 100 - 18 + 1 }, (_, index) => index + 18);
@@ -14,7 +17,41 @@ function FormRegister({ picture }) {
     "GrandParent",
     "Other",
   ];
+  const [name, setName] = React.useState("");
+  const [ageMember, setAgeMember] = React.useState("");
+  const [sex, setSex] = React.useState("");
+  const [relationshipMember, setRelationshipMember] = React.useState("");
   const [selectedIndex, setIndex] = React.useState(0);
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", "Long");
+      formData.append("age", 18);
+      formData.append("relationship", "Father");
+      formData.append("sex", "Male");
+      formData.append("dateStart", "2024-04-09T08:00:00.000Z");
+      formData.append("dateEnd", "2024-04-10T17:00:00.000Z");
+      const image = await FileSystem.readAsStringAsync(picture.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      formData.append("file", image);
+      // Gửi yêu cầu POST lên server
+      const response = await axios.post(
+        "http://localhost:8080/member/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(formData);
+      console.log(image);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View>
@@ -36,7 +73,12 @@ function FormRegister({ picture }) {
             color="#000000"
             backgroundColor="#FFFFFF"
           />
-          <TextInput placeholder="Enter your name" style={styles.inputName} />
+          <TextInput
+            placeholder="Enter your name"
+            style={styles.inputName}
+            onChangeText={setName}
+            value={name}
+          />
         </View>
       </View>
       <View
@@ -49,6 +91,7 @@ function FormRegister({ picture }) {
       >
         <Text style={{ fontSize: 20, marginLeft: 10 }}>Age</Text>
         <SelectDropdown
+          onChangeText={setAgeMember}
           data={age}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
@@ -117,6 +160,7 @@ function FormRegister({ picture }) {
       >
         <Text style={{ fontSize: 20, marginLeft: 10 }}>Relationship</Text>
         <SelectDropdown
+          onChangeText={setRelationshipMember}
           data={relationship}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
@@ -160,7 +204,7 @@ function FormRegister({ picture }) {
           marginTop: 20,
         }}
         titleStyle={{ color: "black", fontWeight: "bold" }}
-        onPress={() => console.log(picture)}
+        onPress={handleSubmit}
       >
         Done
       </Button>

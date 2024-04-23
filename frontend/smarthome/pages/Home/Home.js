@@ -2,6 +2,8 @@ import { SafeAreaView, StyleSheet, Text, View, Image } from "react-native";
 import Header from "../../components/Header/Header.js";
 import FamilyMember from "../../components/FamilyMember/FamilyMember.js";
 import BottomSheetComponent from "../../components/BottomSheet/BottomSheet.js";
+import { useEffect } from "react";
+import axios from "axios";
 function Home() {
   const familyMember = {
     image: [
@@ -19,6 +21,17 @@ function Home() {
       },
     ],
   };
+  const fetchMemberLastAccess = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/family/last-access"
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {}, []);
   return (
     <View style={styles.container}>
       <Header title={"Home"} />

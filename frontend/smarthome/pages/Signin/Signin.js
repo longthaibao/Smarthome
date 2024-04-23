@@ -7,11 +7,35 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import axios from "axios";
 
 function Signin() {
   const navigation = useNavigation();
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
+  const handleSubmit = async () => {
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    if (!email || !password) {
+      alert("Please fill in all fields");
+    } else {
+      try {
+        const response = await axios.post("http://localhost:8080/admin/login", {
+          email: email,
+          password: password,
+        });
+        if (response.data) {
+          alert("Login successful");
+          navigation.navigate("Home");
+        } else {
+          alert("Invalid credentials");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <View>
@@ -35,15 +59,13 @@ function Signin() {
             style={styles.email}
             secureTextEntry="true"
             onChangeText={onChangePassword}
+            value={password}
           />
         </View>
         <TouchableOpacity>
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonSubmit}
-          onPress={() => navigation.navigate("Home")}
-        >
+        <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
           <Text style={styles.contentButton}>Sign In</Text>
         </TouchableOpacity>
       </View>
