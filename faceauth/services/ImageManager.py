@@ -1,4 +1,5 @@
 import io
+import base64
 from PIL import Image
 from config import IMAGE_DB_DIR
 import fnmatch
@@ -27,8 +28,35 @@ def remove_images(home_id: str, user_id: str):
     except FileNotFoundError as e:
         return
 
-def preprocess(binary_img: bytes) -> np.ndarray:
-    with Image.open(io.BytesIO(binary_img)) as img:
-        rgb_img = img.convert('RGB')
-        return np.array(rgb_img)
+def preprocess(pre_img: bytes | str) -> np.ndarray:
+    if type(pre_img) is bytes:
+        with Image.open(io.BytesIO(pre_img)) as img:
+            rgb_img = img.convert('RGB')
+            return np.array(rgb_img)
+    else:
+        b64_img = pre_img
+        # Decode the base64 string
+        decoded_bytes = base64.b64decode(b64_img)
+        
+        # Convert bytes to PIL Image
+        image = Image.open(io.BytesIO(decoded_bytes))
+        
+        # Convert PIL Image to numpy array
+        numpy_array = np.array(image)
+        
+        return numpy_array
 
+def convert_to_b64(np_img: np.ndarray) -> str:
+    # Convert the NumPy array to an image
+    image = Image.fromarray(np_img)
+
+    # Create a BytesIO object to hold the image data
+    image_buffer = io.BytesIO()
+
+    # Save the image to the BytesIO object in PNG format
+    image.save(image_buffer, format="PNG")
+
+    # Convert the image data to a Base64 string
+    base64_str = base64.b64encode(image_buffer.getvalue()).decode("utf-8")
+
+    return base64_str

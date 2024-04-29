@@ -15,12 +15,8 @@ logging.basicConfig(filename="faceverif.log", encoding="utf-8", level=logging.DE
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """This script will run on the startup of the server."""
-
-    logger = logging.getLogger("faceveriflogger")
-    logger.info(f"Loading face verification model. Model name: {FACE_REG_MODEL_NAME}")
-    DeepFace.build_model(FACE_REG_MODEL_NAME)
+    ImageVerification.start()
     yield
-
     # create directory used to store image data
     try:
         os.mkdir(IMAGE_DB_DIR)
@@ -51,10 +47,3 @@ async def register(master_id: Annotated[str, Form()], member_id: Annotated[str, 
 @app.post("/deregister")
 async def deregister(data: DeregisterBody):
     ImageVerification.deregister(data.master_id, data.member_id)
-
-@app.post("/verify")
-async def verify(master_id: Annotated[str, Form()], image: UploadFile):
-    raw_img = await image.read()
-    preprocessed_img = ImageManager.preprocess(raw_img)
-    verif_result = ImageVerification.verify(master_id, preprocessed_img)
-    return verif_result
