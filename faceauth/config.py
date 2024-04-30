@@ -6,3 +6,9 @@ IMAGE_DB_DIR = os.getcwd() + "/image-db" # directory to the folder storing face 
 
 ADAFRUIT_IO_KEY = ''
 ADAFRUIT_IO_USERNAME = 'dpnam2112'
+
+FIREBASE_PROJECT_ID = ''
+
+CLOUDINARY_API_KEY = ''
+CLOUDINARY_API_SECRET = ''
+CLOUDINARY_NAME = ''
