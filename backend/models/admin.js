@@ -16,6 +16,11 @@ const adminSchema = Schema(
       type: String,
       required: true,
     },
+
+    registrationToken: {
+      type: String,
+      required: false
+    }
   },
   { timestamps: true }
 );

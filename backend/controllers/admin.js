@@ -51,5 +51,18 @@ module.exports = class admin {
     }
   }
 
+  static async apiUpdateRegToken(req, res, next) {
+    try {
+      if (!req.body) return next(new AppError("No form data found", 404));
+      const updated = await adminService.updateRegistrationToken(req.param.id, req.body.registrationToken);
 
+      if (updated.modifiedCount === 0) {
+        throw new Error("Unable to update , an error occurred.");
+      }
+
+      res.status(200).json(updated);
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  }
 };

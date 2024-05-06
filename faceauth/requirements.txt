@@ -6,3 +6,5 @@ uvicorn
 tf-keras
 aiohttp
 python-multipart
+firebase-admin
+cloudinary

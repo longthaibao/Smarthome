@@ -11,6 +11,7 @@ from config import FACE_REG_MODEL_NAME, ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY
 from config import IMAGE_DB_DIR
 from db import connection
 import logging
+from . import Notification
 
 class FaceException(Exception):
     def __init__(self, img_idx: int, error_msg: str):
@@ -89,23 +90,41 @@ def __verify(master_id: str, image: np.ndarray):
     return { 'verified': verified, 'member_ids': member_ids, 'master_id': master_id }
 
 def __adafruit_on_message(client, feed_id: str, payload: str):
+    """This callback is called everytime an image is pushed to adafruit i/o."""
     master_id, feed_type = __parse_feed_name(feed_id)
+
     if feed_type == "door":
         return
 
     try:
         np_img = ImageManager.preprocess(payload)
+
+        # verify the received image against the database of images.
+        # if the image is verified, open the door.
         verif_result = __verify(master_id, np_img)
+
         if verif_result['verified']:
             # Member's face is detected, open the door
             logger.info(f"Face detected: {verif_result}")
             __handle_opening_door(master_id)
+        
+        # Upload the image to the image server.
+        img_url = ImageManager.upload_image(master_id, np_img)
 
-        # TODO: save the verification history
-        img_b64 = ImageManager.convert_to_b64(np_img)
-        connection.create_document("IOT", { "image": img_b64, "date": datetime.now()  })
+        # Send the notification to the home master's device.
+        Notification.send_notification(master_id, img_url, verif_result)
+
+        # record the verification.
+        verif_time = datetime.now()
+        connection.create_document("IOT", { "image": img_url, "date": verif_time })
+
+        # update verification history of home's member.
+        assert verif_result["member_ids"] != []
+
+        member_id = verif_result["member_ids"][0]
+        connection.update_document("member", { "_id": member_id }, { "active": verif_time }, "push")
     except Exception as e:
-        print("an error occurred, payload = " + payload)
+        traceback.print_exception(e)
     
 
 def __adafruit_on_connect(client):

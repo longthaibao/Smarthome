@@ -4,17 +4,14 @@ class RefImg(BaseModel):
     user_id: str
     image: str
 
-class FaceRegistrationData(BaseModel):
-    user_id: str
+class FaceRegistrationPayload(BaseModel):
+    master_id: str          # id of the home master
+    member_id: str          # member id
+    images: list[str]       # multiple images in base64 format
 
 class DeregisterBody(BaseModel):
     master_id: str
     member_id: str
-
-
-class VerifData(BaseModel):
-    captured_img: str
-    references: list[RefImg]
 
 class VerifResult(BaseModel):
     user_id: str | None

@@ -20,7 +20,8 @@ module.exports = class adminService{
             const newadmin = {
                 fullname: data.fullname,  
                 email: data.email,
-                password: hashpassword
+                password: hashpassword,
+		registrationToken: data.registrationToken
             }
            const response = await new admin(newadmin).save();
            return response;
@@ -50,4 +51,15 @@ module.exports = class adminService{
           expiresIn: '1h',
         })
       }
+
+    static async updateRegistrationToken(id, token) {
+      try {
+	const res = await admin.findByIdAndUpdate(
+	  id,
+	  { registrationToken: token }
+	)
+      } catch (err) {
+	console.log(err);
+      }
+    }
 };

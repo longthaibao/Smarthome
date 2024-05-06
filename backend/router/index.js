@@ -7,6 +7,7 @@ const IOTCtrl = require("../controllers/IOT");
 // admin routes
 router.post("/admin/login", adminCtrl.apiCheckadmin);
 router.post("/admin/register", adminCtrl.apiCreateadmin);
+router.post("/admin/edit/:id", adminCtrl.apiUpdateRegToken);
 router.put("/admin/edit/:id",adminCtrl.apiEditadmin);
 
 // member routes
@@ -19,7 +20,7 @@ router.put("/member/extend/:id", memberCtrl.apiExtendmember);
 
 // IOT router
 router.get("/IOT/lastAuthorization", IOTCtrl.apiLastAuthorizationIOT);
-router.get("/IOT/open", IOTCtrl.apiOpenIOT);
+router.post("/IOT/doorCtrl", IOTCtrl.controlDoor);
 
 
 module.exports = router;

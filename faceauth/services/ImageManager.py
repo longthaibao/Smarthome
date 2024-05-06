@@ -6,6 +6,7 @@ import fnmatch
 import numpy as np
 import os
 import cv2
+import cloudinary.uploader
 
 def save_images(home_id: str, user_id: str, images: list[np.ndarray]):
     try:
@@ -27,6 +28,22 @@ def remove_images(home_id: str, user_id: str):
                 os.remove(f"{home_img_db}/{img_file}")
     except FileNotFoundError as e:
         return
+
+def upload_image(master_id: str, np_img: np.ndarray) -> str:
+    """Upload an image to the image server.
+
+    Returns:
+        An url (str) to the uploaded image.
+    """
+
+    # TODO: Implement this function that is used to upload an image to the cloud.
+    image = Image.fromarray(np_img)
+    buff = io.BytesIO()
+    image.save(buff, format="PNG")
+    # move the buffer cursor to the beginning
+    buff.seek(0)
+    result = cloudinary.uploader.upload(buff)
+    return result["url"]
 
 def preprocess(pre_img: bytes | str) -> np.ndarray:
     if type(pre_img) is bytes:
