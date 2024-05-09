@@ -1,16 +1,22 @@
 const memberService = require("../services/member");
 const AppError = require("../helpers/appError");
 
+
 module.exports = class member {
   static async apiCreatemember(req, res, next) {
     try {
       if (!req.body) return next(new AppError("No form data found", 404));
 
-      const createdmember = await memberService.creatmember(req.body);
-
-      res.status(200).json({
-        member: createdmember,
+      const createdmember = await memberService.creatmember({
+          name: req.body.name,  
+          image: req.file["path"],
+          sex: req.body.sex,
+          relationship: req.body.relationship,
+          age : req.body.age,
+          dateStart: new Date(req.body.dateStart),
+          dateEnd: new Date(req.body.dateEnd),     
       });
+      res.status(200).json(createdmember);
     } catch (error) {
       res.status(500).json({ error: error });
     }
@@ -95,11 +101,4 @@ module.exports = class member {
       res.status(500).json({ error: error });
     }
   }
-
-
-
-
-
-
-
 };

@@ -1,5 +1,5 @@
 // requiring database
-require("./mongoDB/config");
+require("./config/DBconfig");
 require('dotenv').config();
 
 // error
@@ -15,8 +15,8 @@ const bodyParser =  require("body-parser");
 const router = require("./router/index");
 const app = express();  
 const port = process.env.port;
-  
-  
+
+
 
 //config API routes;  
 app.use(cors())
