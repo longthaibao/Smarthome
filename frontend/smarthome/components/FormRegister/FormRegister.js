@@ -5,7 +5,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Button, CheckBox } from "@rneui/themed";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
-import { Platform } from "react-native";
 
 function FormRegister({ picture }) {
   const age = Array.from({ length: 100 - 18 + 1 }, (_, index) => index + 18);
@@ -17,10 +16,12 @@ function FormRegister({ picture }) {
     "GrandParent",
     "Other",
   ];
+  const timeRegister = [10, 20, 30, 45];
   const [name, setName] = React.useState("");
   const [ageMember, setAgeMember] = React.useState("");
   const [sex, setSex] = React.useState("");
   const [relationshipMember, setRelationshipMember] = React.useState("");
+  const [dateRegister, setDateRegister] = React.useState(10);
   const [selectedIndex, setIndex] = React.useState(0);
 
   const handleSubmit = async () => {
@@ -30,8 +31,14 @@ function FormRegister({ picture }) {
       formData.append("age", 18);
       formData.append("relationship", "Father");
       formData.append("sex", "Male");
-      formData.append("dateStart", "2024-04-09T08:00:00.000Z");
-      formData.append("dateEnd", "2024-04-10T17:00:00.000Z");
+      const dateStart = new Date(Date.now()).toISOString();
+      const temDateEnd = new Date(dateStart);
+      temDateEnd.setTime(
+        temDateEnd.getTime() + dateRegister * 24 * 60 * 60 * 1000
+      );
+      const dateEnd = temDateEnd.toISOString();
+      formData.append("dateStart", dateStart);
+      formData.append("dateEnd", dateEnd);
       const image = await FileSystem.readAsStringAsync(picture.uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
@@ -46,8 +53,6 @@ function FormRegister({ picture }) {
           },
         }
       );
-      console.log(formData);
-      console.log(image);
     } catch (error) {
       console.error(error);
     }
@@ -93,9 +98,6 @@ function FormRegister({ picture }) {
         <SelectDropdown
           onChangeText={setAgeMember}
           data={age}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
-          }}
           renderButton={(selectedItem, isOpened) => {
             return (
               <View style={styles.dropdownButtonStyle}>
@@ -150,6 +152,7 @@ function FormRegister({ picture }) {
           />
         </View>
       </View>
+
       <View
         style={{
           flexDirection: "column",
@@ -162,9 +165,51 @@ function FormRegister({ picture }) {
         <SelectDropdown
           onChangeText={setRelationshipMember}
           data={relationship}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+          renderButton={(selectedItem, isOpened) => {
+            return (
+              <View style={styles.dropdownButtonStyle}>
+                <Text style={styles.dropdownButtonTxtStyle}>
+                  {selectedItem || "Select relationship"}
+                </Text>
+                <Ionicons
+                  name={
+                    isOpened ? "chevron-up-outline" : "chevron-down-outline"
+                  }
+                  style={styles.dropdownButtonArrowStyle}
+                />
+              </View>
+            );
           }}
+          renderItem={(item, index, isSelected) => {
+            return (
+              <View
+                style={{
+                  ...styles.dropdownItemStyle,
+                  ...(isSelected && { backgroundColor: "#D2D9DF" }),
+                }}
+              >
+                <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+              </View>
+            );
+          }}
+          showsVerticalScrollIndicator={false}
+          dropdownStyle={styles.dropdownMenuStyle}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          width: "90%",
+        }}
+      >
+        <Text style={{ fontSize: 20, marginLeft: 10 }}>
+          Time register (day)
+        </Text>
+        <SelectDropdown
+          onChangeText={setDateRegister}
+          data={timeRegister}
           renderButton={(selectedItem, isOpened) => {
             return (
               <View style={styles.dropdownButtonStyle}>

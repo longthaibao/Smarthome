@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import Header from "../../components/Header/Header.js";
 import FamilyMember from "../../components/FamilyMember/FamilyMember.js";
 import BottomSheetComponent from "../../components/BottomSheet/BottomSheet.js";

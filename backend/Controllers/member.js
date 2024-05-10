@@ -5,7 +5,6 @@ module.exports = class member {
   static async apiCreatemember(req, res, next) {
     try {
       if (!req.body) return next(new AppError("No form data found", 404));
-      console.log(req.body);
       const createdmember = await memberService.creatmember({
         name: req.body.name,
         image: req.file["path"],

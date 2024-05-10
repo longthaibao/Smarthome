@@ -26,7 +26,6 @@ function Signin() {
           password: password,
         });
         if (response.data) {
-          alert("Login successful");
           navigation.navigate("Home");
         } else {
           alert("Invalid credentials");

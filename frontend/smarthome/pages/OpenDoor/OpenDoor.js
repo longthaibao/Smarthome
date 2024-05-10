@@ -4,6 +4,7 @@ import BottomSheetComponent from "../../components/BottomSheet/BottomSheet";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Button } from "@rneui/themed";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 function OpenDoor() {
   const image = [
@@ -16,15 +17,24 @@ function OpenDoor() {
       // Gửi yêu cầu POST lên server
       const response = await axios.get("http://localhost:8080/IOT/open");
       if (response.status === 200) {
-        alert("Open Door Successfully!");
+        showToast();
       }
     } catch (error) {
       console.error(error);
     }
   };
+  const showToast = () => {
+    Toast.show({
+      type: "success",
+      position: "top",
+      topOffset: 200,
+      text1: "Open Door Successfully!",
+    });
+  };
   return (
     <View style={styles.container}>
       <Header title={"Open Door"} />
+      <Toast />
       <View style={styles.wrapperImage}>
         <Image source={image[0]} style={styles.image} />
         <View
