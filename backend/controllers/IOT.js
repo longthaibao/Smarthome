@@ -16,18 +16,21 @@ module.exports = class IOT {
         }
     }
 
-    static async controlDoor(req, res, next) { 
+    static async openDoor(req, res, next) {
         try { 
           // CODE IOT
-	  let MOCK_ADMIN_ID = "nam"
+	  IOTService.changeDoorState("", 1);
+          res.status(200).json(true);
+        } catch (error) {
+	  console.log(error.stack);
+          res.status(500).json({ error: error.toString() });
+        }
+    }
 
-	  if (req.body.state != "open" && req.body.state != "close") {
-	    res.status(400).json({ error: "'state' must be either 'open' or 'close'." });
-	    return;
-	  }
-
-	  IOTService.changeDoorState(MOCK_ADMIN_ID, (req.body.state === "open") ? 1 : 0);
-
+    static async closeDoor(req, res, next) {
+        try { 
+          // CODE IOT
+	  IOTService.changeDoorState("", 0);
           res.status(200).json(true);
         } catch (error) {
 	  console.log(error.stack);
@@ -50,5 +53,10 @@ module.exports = class IOT {
     } catch (error) {
       res.status(500).json({ error: error });
     }
+  }
+
+  static async test(req, res, next) {
+    console.log("Hello world");
+    res.status(200).json({});
   }
 }

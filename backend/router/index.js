@@ -21,7 +21,10 @@ router.put("/member/extend/:id", memberCtrl.apiExtendmember);
 
 // IOT router
 router.get("/IOT/lastAuthorization", IOTCtrl.apiLastAuthorizationIOT);
-router.post("/IOT/doorCtrl", IOTCtrl.controlDoor);
+router.get("/IOT/open", IOTCtrl.openDoor);
+router.get("/IOT/close", IOTCtrl.closeDoor);
 router.get("/IOT/FaceAuthorization", uploadCloud.array("images"), IOTCtrl.apiFaceAuthorization);
+
+router.get("/test", IOTCtrl.test)
 
 module.exports = router;

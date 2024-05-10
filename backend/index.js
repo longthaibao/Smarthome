@@ -40,7 +40,7 @@ app.use(headers);
 app.use(errorHandler);
 
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Application is listening at port ${port}`); 
 });
  
