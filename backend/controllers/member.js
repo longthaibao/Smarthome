@@ -1,25 +1,51 @@
 const memberService = require("../services/member");
 const AppError = require("../helpers/appError");
-
+const uploadCloud = require("../config/cloudinary.config");
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config();
 
 module.exports = class member {
   static async apiCreatemember(req, res, next) {
     try {
+
       if (!req.body) return next(new AppError("No form data found", 404));
 
-      const createdmember = await memberService.creatmember({
-          name: req.body.name,  
-          image: req.file["path"],
-          sex: req.body.sex,
-          relationship: req.body.relationship,
-          age : req.body.age,
-          dateStart: new Date(req.body.dateStart),
-          dateEnd: new Date(req.body.dateEnd),     
-      });
-      res.status(200).json(createdmember);
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_NAME,
+        api_key: process.env.CLOUDINARY_KEY,
+        api_secret: process.env.CLOUDINARY_SECRET
+    });
+    
+    try {
+        const myCloud = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload(req.body.images, {
+                folder: "Face",
+                // width: 150,
+                // crop: "scale",
+            }, (error, result) => {
+                if (error) res.status(500).json({ error: error });
+                else resolve(result);
+            });
+        });
+
+        console.log(myCloud["url"])
+        const createdmember = await memberService.creatmember({
+            name: req.body.name,  
+            image: myCloud["url"],
+            sex: req.body.sex,
+            relationship: req.body.relationship,
+            age : req.body.age,
+            dateStart: new Date(req.body.dateStart),
+            dateEnd: new Date(req.body.dateEnd),     
+          });
+          res.status(200).json(createdmember);
+        } catch (error) {
+          res.status(500).json({ error: error });
+        }
     } catch (error) {
       res.status(500).json({ error: error });
     }
+
   }
 
   static async apiListImagemember(req, res, next) {
