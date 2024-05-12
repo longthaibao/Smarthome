@@ -7,6 +7,7 @@ import numpy as np
 import os
 import cv2
 import cloudinary.uploader
+import requests
 
 def save_images(home_id: str, user_id: str, images: list[np.ndarray]):
     try:
@@ -44,6 +45,21 @@ def upload_image(master_id: str, np_img: np.ndarray) -> str:
     buff.seek(0)
     result = cloudinary.uploader.upload(buff)
     return result["url"]
+
+def download_image(url) -> np.ndarray:
+    response = requests.get(url)
+
+    # Raise an exception if the request was not successful
+    response.raise_for_status()
+
+    # Open the image using PIL
+    image = Image.open(io.BytesIO(response.content))
+
+    # Convert the image to a NumPy array
+    image_array = np.array(image)
+
+    return image_array
+
 
 def preprocess(pre_img: bytes | str) -> np.ndarray:
     if type(pre_img) is bytes:

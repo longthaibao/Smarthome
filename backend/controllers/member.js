@@ -28,7 +28,8 @@ module.exports = class member {
             });
         });
 
-        console.log(myCloud["url"])
+        console.log("myCloud[url] = " + myCloud["url"]);
+
         const createdmember = await memberService.creatmember({
             name: req.body.name,  
             image: myCloud["url"],
@@ -38,6 +39,19 @@ module.exports = class member {
             dateStart: new Date(req.body.dateStart),
             dateEnd: new Date(req.body.dateEnd),     
           });
+
+	const faceRegResp = await fetch(process.env.FACEAUTH_URL + "/register", {
+	  method: "POST",
+	  headers: {
+	    "Content-Type": "application/json"
+	  },
+	  body: JSON.stringify({
+	    "master_id": "nam",
+	    "member_id": createdmember._id,
+	    "image_urls": [ myCloud["url"] ]
+	  })
+	});
+
           res.status(200).json(createdmember);
         } catch (error) {
           res.status(500).json({ error: error });

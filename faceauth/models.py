@@ -7,7 +7,7 @@ class RefImg(BaseModel):
 class FaceRegistrationPayload(BaseModel):
     master_id: str          # id of the home master
     member_id: str          # member id
-    images: list[str]       # multiple images in base64 format
+    image_urls: list[str]       # multiple images in base64 format
 
 class DeregisterBody(BaseModel):
     master_id: str
