@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const adminSchema = Schema(
   {
-    fullname: { 
+    fullname: {
       type: String,
       required: true,
     },
@@ -11,16 +11,15 @@ const adminSchema = Schema(
       type: String,
       required: true,
     },
-
-    password: { 
+    password: {
       type: String,
       required: true,
     },
 
     registrationToken: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
   { timestamps: true }
 );
