@@ -30,6 +30,7 @@ module.exports = class admin {
       console.log(req.body);
       if (!req.body) return next(new AppError("No form data found", 404));
       const createdadmin = await adminService.createadmin(req.body);
+
       res.status(200).json(createdadmin);
     } catch (error) {
       res.status(500).json({ error: error });
@@ -48,6 +49,24 @@ module.exports = class admin {
 
       if (updated.modifiedCount === 0) {
         throw new Error("Unable to update , error occord");
+      }
+
+      res.status(200).json(updated);
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  }
+
+  static async apiUpdateRegToken(req, res, next) {
+    try {
+      if (!req.body) return next(new AppError("No form data found", 404));
+      const updated = await adminService.updateRegistrationToken(
+        req.param.id,
+        req.body.registrationToken
+      );
+
+      if (updated.modifiedCount === 0) {
+        throw new Error("Unable to update , an error occurred.");
       }
 
       res.status(200).json(updated);

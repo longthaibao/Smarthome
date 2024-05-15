@@ -1,10 +1,17 @@
 import React from "react";
-import { Text, View, StyleSheet, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Button, CheckBox } from "@rneui/themed";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
+import { useNavigation } from "@react-navigation/native";
 
 function FormRegister({ picture }) {
   const age = Array.from({ length: 100 - 18 + 1 }, (_, index) => index + 18);
@@ -18,31 +25,33 @@ function FormRegister({ picture }) {
   ];
   const timeRegister = [10, 20, 30, 45];
   const [name, setName] = React.useState("");
-  const [ageMember, setAgeMember] = React.useState("");
-  const [sex, setSex] = React.useState("");
+  const [ageMember, setAgeMember] = React.useState(18);
+  const [sex, setSex] = React.useState(true);
   const [relationshipMember, setRelationshipMember] = React.useState("");
-  const [dateRegister, setDateRegister] = React.useState(10);
-  const [selectedIndex, setIndex] = React.useState(0);
+  const [dateRegister, setDateRegister] = React.useState(0);
+
+  const navigation = useNavigation();
 
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append("name", "Long");
-      formData.append("age", 18);
-      formData.append("relationship", "Father");
-      formData.append("sex", "Male");
-      const dateStart = new Date(Date.now()).toISOString();
+      formData.append("name", name);
+      formData.append("age", ageMember);
+      formData.append("relationship", relationshipMember);
+      formData.append("sex", sex);
+      const dateStart = new Date(Date.now()).toISOString().slice(0, 10);
       const temDateEnd = new Date(dateStart);
       temDateEnd.setTime(
         temDateEnd.getTime() + dateRegister * 24 * 60 * 60 * 1000
       );
-      const dateEnd = temDateEnd.toISOString();
+      const dateEnd = temDateEnd.toISOString().slice(0, 10);
       formData.append("dateStart", dateStart);
       formData.append("dateEnd", dateEnd);
-      const image = await FileSystem.readAsStringAsync(picture.uri, {
+      let image = await FileSystem.readAsStringAsync(picture.uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
-      formData.append("file", image);
+      image = `data:image/jpeg;base64,${image}`;
+      formData.append("images", image);
       // Gửi yêu cầu POST lên server
       const response = await axios.post(
         "http://localhost:8080/member/register",
@@ -53,6 +62,10 @@ function FormRegister({ picture }) {
           },
         }
       );
+      if (response.status === 200) {
+        alert("Register success");
+        navigation.navigate("Home");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -96,8 +109,8 @@ function FormRegister({ picture }) {
       >
         <Text style={{ fontSize: 20, marginLeft: 10 }}>Age</Text>
         <SelectDropdown
-          onChangeText={setAgeMember}
           data={age}
+          onSelect={(selectedItem, index) => setAgeMember(selectedItem)}
           renderButton={(selectedItem, isOpened) => {
             return (
               <View style={styles.dropdownButtonStyle}>
@@ -133,8 +146,8 @@ function FormRegister({ picture }) {
         <Text style={{ fontSize: 20, marginLeft: 20 }}>Sex</Text>
         <View>
           <CheckBox
-            checked={selectedIndex === 0}
-            onPress={() => setIndex(0)}
+            checked={sex === true}
+            onPress={() => setSex(true)}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             title="Men"
@@ -142,8 +155,8 @@ function FormRegister({ picture }) {
             containerStyle={{ backgroundColor: "transparent" }}
           />
           <CheckBox
-            checked={selectedIndex === 1}
-            onPress={() => setIndex(1)}
+            checked={sex === false}
+            onPress={() => setSex(false)}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             title="Women"
@@ -163,7 +176,9 @@ function FormRegister({ picture }) {
       >
         <Text style={{ fontSize: 20, marginLeft: 10 }}>Relationship</Text>
         <SelectDropdown
-          onChangeText={setRelationshipMember}
+          onSelect={(selectedItem, index) =>
+            setRelationshipMember(selectedItem)
+          }
           data={relationship}
           renderButton={(selectedItem, isOpened) => {
             return (
@@ -188,7 +203,12 @@ function FormRegister({ picture }) {
                   ...(isSelected && { backgroundColor: "#D2D9DF" }),
                 }}
               >
-                <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+                <Text
+                  onPress={setRelationshipMember(item)}
+                  style={styles.dropdownItemTxtStyle}
+                >
+                  {item}
+                </Text>
               </View>
             );
           }}
@@ -208,7 +228,7 @@ function FormRegister({ picture }) {
           Time register (day)
         </Text>
         <SelectDropdown
-          onChangeText={setDateRegister}
+          onSelect={(selectedItem, index) => setDateRegister(selectedItem)}
           data={timeRegister}
           renderButton={(selectedItem, isOpened) => {
             return (
@@ -233,7 +253,12 @@ function FormRegister({ picture }) {
                   ...(isSelected && { backgroundColor: "#D2D9DF" }),
                 }}
               >
-                <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+                <Text
+                  onPress={setDateRegister(item)}
+                  style={styles.dropdownItemTxtStyle}
+                >
+                  {item}
+                </Text>
               </View>
             );
           }}

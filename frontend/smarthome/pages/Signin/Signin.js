@@ -26,7 +26,13 @@ function Signin() {
           password: password,
         });
         if (response.data) {
-          navigation.navigate("Home");
+          // res.status(400).json({ error: "Invalid Password" });
+          if (response.data.error) {
+            alert("Invalid Password");
+          } else {
+            alert("Login successful");
+            navigation.navigate("Home");
+          }
         } else {
           alert("Invalid credentials");
         }

@@ -137,7 +137,6 @@ function Signup() {
           <TextInput
             placeholder="Your fullname"
             style={styles.email}
-            secureTextEntry="true"
             onChangeText={onChangeFullname}
             autoCompleteType="off"
             onBlur={handleBlur}

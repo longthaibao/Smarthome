@@ -5,12 +5,12 @@ function FamilyMember({ familyMember }) {
     <View style={styles.container}>
       <Text style={{ color: "#FFFFFF", fontSize: 20 }}> Family members</Text>
       <View style={styles.listMember}>
-        {familyMember.image.map((image, index) => (
+        {familyMember.map((member, index) => (
           <View
             key={index}
             style={[styles.avatarWrapper, styles.overlappingAvatar]}
           >
-            <Image source={image} style={styles.avatar} />
+            <Image source={{ uri: member.image }} style={styles.avatar} />
           </View>
         ))}
       </View>

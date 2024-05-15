@@ -2,36 +2,37 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import Header from "../../components/Header/Header.js";
 import FamilyMember from "../../components/FamilyMember/FamilyMember.js";
 import BottomSheetComponent from "../../components/BottomSheet/BottomSheet.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 function Home() {
-  const familyMember = {
-    image: [
-      {
-        uri: "https://images.unsplash.com/photo-1620067925093-801122ac1408?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvdG8lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D",
-      },
-      {
-        uri: "https://images.unsplash.com/photo-1620067925093-801122ac1408?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvdG8lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D",
-      },
-      {
-        uri: "https://images.unsplash.com/photo-1620067925093-801122ac1408?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvdG8lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D",
-      },
-      {
-        uri: "https://images.unsplash.com/photo-1620067925093-801122ac1408?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvdG8lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D",
-      },
-    ],
-  };
+  const urlDefault =
+    "https://images.unsplash.com/photo-1620067925093-801122ac1408?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvdG8lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D";
+  const [familyMember, setFamilyMember] = useState([]);
+  const [lastAccess, setLastAccess] = useState(null);
+
   const fetchMemberLastAccess = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/family/last-access"
+        "http://localhost:8080/IOT/lastAuthorization"
       );
       console.log(response.data);
+      setLastAccess(response.data);
     } catch (error) {
       console.error(error);
     }
   };
-  useEffect(() => {}, []);
+  const fetchFamilyMember = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/member/list");
+      setFamilyMember(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchFamilyMember();
+    fetchMemberLastAccess();
+  }, []);
   return (
     <View style={styles.container}>
       <Header title={"Home"} />
@@ -41,7 +42,12 @@ function Home() {
           <Text style={styles.titleAccess}>Latest access: </Text>
           <Text style={styles.titleAccess}>19:00, 01/01/2024</Text>
         </View>
-        <Image source={familyMember.image[0]} style={styles.imageAccess} />
+        <Image
+          source={{
+            uri: lastAccess && lastAccess.image ? lastAccess.image : urlDefault,
+          }}
+          style={styles.imageAccess}
+        />
       </View>
       <View style={styles.bottomsheet}>
         <BottomSheetComponent active={1} />
