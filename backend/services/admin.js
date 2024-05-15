@@ -49,4 +49,13 @@ module.exports = class adminService {
       expiresIn: "1h",
     });
   }
+
+  static async getAdminDetails(adminId) {
+    try {
+      const adminDetails = await admin.findById(adminId);
+      return adminDetails;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

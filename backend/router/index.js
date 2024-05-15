@@ -9,6 +9,8 @@ const uploadCloud = require("../config/cloudinary.config");
 router.post("/admin/login", adminCtrl.apiCheckadmin);
 router.post("/admin/register", adminCtrl.apiCreateadmin);
 router.put("/admin/edit/:id", adminCtrl.apiEditadmin);
+router.get("/admin/details/:id", adminCtrl.apiGetAdminDetails);
+
 
 // member routes
 router.post(
