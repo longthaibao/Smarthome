@@ -11,7 +11,7 @@ class HistoryList extends Component {
         {
           this.props.names.map((item) => (
             <View key={item._id} style={styles.item} onPress={0}>
-              <Image source={icon} style={styles.icon} />
+              <Image source={item.image} style={styles.icon} />
               <View style={styles.infoWrap}>
                 <Text style={styles.person}>
                   {item.name}

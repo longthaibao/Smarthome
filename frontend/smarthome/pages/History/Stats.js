@@ -11,7 +11,7 @@ class StatsList extends Component {
         {
           this.props.stats.map((item) => (
             <View key={item._id} style={styles.item}>
-              <Image source={icon} style={styles.icon} />
+              <Image source={item.image} style={styles.icon} />
               <View style={styles.infoWrap}>
                 <Text style={styles.person}>
                   {item.name}
