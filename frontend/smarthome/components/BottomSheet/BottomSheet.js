@@ -26,12 +26,26 @@ function BottomSheetComponent({ active }) {
         >
           <Feather
             name="home"
-            size={28}
+            size={27}
             color={active == 1 ? "#8e44ad" : "white"}
             style={styles.icon}
           />
           <Text style={[styles.title, active === 1 && styles.active]}>
             Home
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.wrapperIcon}
+          onPress={() => navigation.navigate("History")}
+        >
+          <Feather
+            name="clock"
+            size={27}
+            color={active == 5 ? "#8e44ad" : "white"}
+            style={styles.icon}
+          />
+          <Text style={[styles.title, active === 5 && styles.active]}>
+            History
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -62,7 +76,9 @@ function BottomSheetComponent({ active }) {
             Access
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.wrapperIcon}>
+        <TouchableOpacity 
+          style={styles.wrapperIcon}
+          onPress={() => navigation.navigate("Profile")}>
           <Feather
             name="user"
             size={28}
@@ -109,7 +125,6 @@ const styles = StyleSheet.create({
   wrapperIcon: {
     marginBottom: 40,
     marginTop: 20,
-    alignItems: "center",
   },
   title: {
     fontSize: 12,
