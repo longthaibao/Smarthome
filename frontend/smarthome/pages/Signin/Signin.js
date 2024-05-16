@@ -27,7 +27,10 @@ function Signin() {
       alert("Please fill in all fields");
     } else {
       try {
-        const response = await axios.post("http://localhost:8080/admin/login", {
+        const response = await axios.post(
+          "http://localhost:8080/admin/login", 
+          // "http://192.168.2.2:8080/admin/login",
+          {
           email: email,
           password: password,
         });
@@ -73,7 +76,7 @@ function Signin() {
           <TextInput
             placeholder="Password"
             style={styles.email}
-            secureTextEntry="true"
+            secureTextEntry={true}
             onChangeText={onChangePassword}
             value={password}
           />

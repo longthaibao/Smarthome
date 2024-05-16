@@ -66,6 +66,7 @@ function Signup() {
       try {
         const response = await axios.post(
           "http://localhost:8080/admin/register",
+          // "http://192.168.2.2:8080/admin/register",
           { fullname: fullname, password: password, email: email }
         );
         if (response.status === 200) {
@@ -113,7 +114,7 @@ function Signup() {
           <TextInput
             placeholder="Password"
             style={styles.email}
-            secureTextEntry="true"
+            secureTextEntry={true}
             onChangeText={onChangePassword}
             autoCompleteType="off"
             onBlur={handleBlur}

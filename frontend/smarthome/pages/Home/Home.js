@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   imageAccess: {
     width: "90%",
     height: 350,
-    borderRadius: "20%",
+    borderRadius: 20,
     objectFit: "fit",
   },
   bottomsheet: {
