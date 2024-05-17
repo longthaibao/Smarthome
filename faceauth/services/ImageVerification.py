@@ -37,16 +37,15 @@ def register(master_id: str, member_id: str, images: list[np.ndarray]):
     # extract faces from images. Ensure that each image contains exactly one face.
     for i, image in enumerate(images):
         try:
-            extracted = DeepFace.extract_faces(image, align=False)
+            extracted = DeepFace.extract_faces(image, enforce_detection=False, align=False)
         except ValueError as e:
             # If the face detector detects no faces from the image.
             raise FaceException(i, str(e))
 
-        if len(extracted) != 1:
-            raise FaceException(i, f"detected {len(extracted)} faces.")
+        if len(extracted) == 0:
+            raise FaceException(i, f"detected no faces.")
 
-        np_face = (extracted[0]["face"] * 255)[:, :, ::-1]
-        extracted_faces.append(np_face)
+        extracted_faces.append(image)
 
     ImageManager.save_images(master_id, member_id, extracted_faces)
 
@@ -106,20 +105,20 @@ def __adafruit_on_message(client, feed_id: str, payload: str):
         if verif_result['verified']:
             # Member's face is detected, open the door
             logger.info(f"Face detected: {verif_result}")
+            print(f"detected face: {verif_result}")
             __handle_opening_door(master_id)
-        
+
         # Upload the image to the image server.
         img_url = ImageManager.upload_image(master_id, np_img)
-
-        # Send the notification to the home master's device.
-        Notification.send_notification(master_id, img_url, verif_result)
 
         # record the verification.
         verif_time = datetime.now()
         connection.create_document("IOT", { "image": img_url, "date": verif_time })
 
         # update verification history of home's member.
-        assert verif_result["member_ids"] != []
+        if verif_result["member_ids"] == []:
+            print("detected a stranger.")
+            return
 
         member_id = verif_result["member_ids"][0]
         connection.update_document("member", { "_id": member_id }, { "active": verif_time }, "push")
