@@ -40,7 +40,7 @@ class Stats extends Component {
 
   async fetchStatsData() {
     try {
-      const response = await axios.get('http://localhost:8080/member/static');
+      const response = await axios.get(process.env.EXPO_PUBLIC_BACKEND_URL + '/member/static');
       const statsData = response.data;
       const sortedStatsData = [...statsData].sort((a, b) => new Date(b.count) - new Date(a.count));
       await this.setState({ stats: sortedStatsData });

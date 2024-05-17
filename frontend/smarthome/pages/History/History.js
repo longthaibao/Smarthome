@@ -40,7 +40,7 @@ class History extends Component {
 
   async fetchMemberHistory() {
     try {
-      const response = await axios.get('http://localhost:8080/member/history');
+      const response = await axios.get(process.env.EXPO_PUBLIC_BACKEND_URL + '/member/history');
       const memberHistory = response.data;
       const sortedMemberHistory = [...memberHistory].sort((a, b) => new Date(b.time) - new Date(a.time));
       await this.setState({ names: sortedMemberHistory });

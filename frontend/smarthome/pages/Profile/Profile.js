@@ -30,7 +30,7 @@ class Profile extends Component {
         try {
             const adminId = await AsyncStorage.getItem('adminId'); // Retrieve adminId from AsyncStorage
             const token = await AsyncStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/admin/details/${adminId}`, {
+            const response = await fetch(process.env.EXPO_PUBLIC_BACKEND_URL + `/admin/details/${adminId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`, 
                 },
@@ -62,7 +62,7 @@ class Profile extends Component {
     handleSaveButtonClick = async () => {
         try {
             const { adminId, newAdminDetails } = this.state;
-            const response = await fetch(`http://localhost:8080/admin/edit/${adminId}`, {
+            const response = await fetch(process.env.EXPO_PUBLIC_BACKEND_URL + `/admin/edit/${adminId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
