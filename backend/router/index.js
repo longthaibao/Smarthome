@@ -11,6 +11,8 @@ const upload = multer({ limits: { fieldSize: 3 * 1024 * 1024 } });
 router.post("/admin/login", adminCtrl.apiCheckadmin);
 router.post("/admin/register", adminCtrl.apiCreateadmin);
 router.put("/admin/edit/:id", adminCtrl.apiEditadmin);
+router.get("/admin/details/:id", adminCtrl.apiGetAdminDetails);
+
 
 // member routes
 router.post("/member/register", upload.none(), memberCtrl.apiCreatemember);

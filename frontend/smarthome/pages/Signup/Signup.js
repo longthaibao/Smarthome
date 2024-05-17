@@ -113,7 +113,7 @@ function Signup() {
           <TextInput
             placeholder="Password"
             style={styles.email}
-            secureTextEntry="true"
+            secureTextEntry={true}
             onChangeText={onChangePassword}
             autoCompleteType="off"
             onBlur={handleBlur}

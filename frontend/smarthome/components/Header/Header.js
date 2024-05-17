@@ -1,24 +1,36 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Vector from "../../assets/Vector.png";
 import { useNavigation } from "@react-navigation/native";
 
 function Header({ title }) {
   const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('adminId');
+      navigation.navigate("Onboarding");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerTitle}>{title}</Text>
       <View style={styles.logo}>
-        <Ionicons
-          name="logo-electron"
-          size={32}
-          color="#8e44ad"
-          onPress={() => navigation.navigate("Onboarding")}
-        />
+        <TouchableOpacity onPress={handleLogout}>
+          <Ionicons
+            name="logo-electron"
+            size={32}
+            color="#8e44ad"
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -44,4 +56,5 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
 });
+
 export default Header;

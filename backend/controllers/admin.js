@@ -74,4 +74,17 @@ module.exports = class admin {
       res.status(500).json({ error: error });
     }
   }
+
+  static async apiGetAdminDetails(req, res, next) {
+    try {
+      const adminId = req.params.id;
+      const adminDetails = await adminService.getAdminDetails(adminId);
+      if (!adminDetails) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+      res.status(200).json(adminDetails);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 };

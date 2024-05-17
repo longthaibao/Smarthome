@@ -6,8 +6,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from "react";
 import axios from "axios";
+
+function parseJwt(token) {
+  var Buffer = require('buffer/').Buffer;
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+}
 
 function Signin() {
   const navigation = useNavigation();
@@ -30,6 +36,11 @@ function Signin() {
           if (response.data.error) {
             alert("Invalid Password");
           } else {
+            const token = response.data.token;
+            const decodedToken = parseJwt(token);
+            const adminId = decodedToken.id;
+            await AsyncStorage.setItem('token', token);
+            await AsyncStorage.setItem('adminId', adminId);
             alert("Login successful");
             navigation.navigate("Home");
           }
@@ -62,7 +73,7 @@ function Signin() {
           <TextInput
             placeholder="Password"
             style={styles.email}
-            secureTextEntry="true"
+            secureTextEntry={true}
             onChangeText={onChangePassword}
             value={password}
           />

@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     height: 350,
     borderRadius: "20%",
     objectFit: "contain",
+
   },
   bottomsheet: {
     width: "100%",
