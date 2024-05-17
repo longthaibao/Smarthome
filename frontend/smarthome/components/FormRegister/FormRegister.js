@@ -54,7 +54,7 @@ function FormRegister({ picture }) {
       formData.append("images", image);
       // Gửi yêu cầu POST lên server
       const response = await axios.post(
-        "http://localhost:8080/member/register",
+        process.env.EXPO_PUBLIC_BACKEND_URL + "/member/register",
         formData,
         {
           headers: {
@@ -62,8 +62,13 @@ function FormRegister({ picture }) {
           },
         }
       );
+
       if (response.status === 200) {
         alert("Register success");
+        navigation.navigate("Home");
+      } else {
+	const body = await response.json();
+	alert("Failed to register the face: " + response.reason);
         navigation.navigate("Home");
       }
     } catch (error) {
@@ -234,7 +239,7 @@ function FormRegister({ picture }) {
             return (
               <View style={styles.dropdownButtonStyle}>
                 <Text style={styles.dropdownButtonTxtStyle}>
-                  {selectedItem || "Select relationship"}
+                  {selectedItem || "Time picker"}
                 </Text>
                 <Ionicons
                   name={

@@ -1,14 +1,15 @@
 import io
 import base64
-from PIL import Image
+from PIL import Image, ImageOps
 from config import IMAGE_DB_DIR
 import fnmatch
 import numpy as np
 import os
 import cv2
 import cloudinary.uploader
+import requests
 
-def save_images(home_id: str, user_id: str, images: list[np.ndarray]):
+def save_images(home_id: str, user_id: str, images: list[np.ndarray], convert_color=True):
     try:
         if not os.path.isdir(IMAGE_DB_DIR + f"/{home_id}"):
             os.mkdir(IMAGE_DB_DIR + f"/{home_id}")
@@ -17,7 +18,10 @@ def save_images(home_id: str, user_id: str, images: list[np.ndarray]):
 
     home_img_db = IMAGE_DB_DIR + f"/{home_id}/"
     for i, np_img in enumerate(images):
-        cv2.imwrite(f"{home_img_db}/{user_id}_{i}.jpg", cv2.cvtColor(np_img, cv2.COLOR_RGB2BGR))
+        if convert_color:
+            cv2.imwrite(f"{home_img_db}/{user_id}_{i}.jpg", cv2.cvtColor(np_img, cv2.COLOR_RGB2BGR))
+        else:
+            cv2.imwrite(f"{home_img_db}/{user_id}_{i}.jpg", np_img)
 
 def remove_images(home_id: str, user_id: str):
     home_img_db = IMAGE_DB_DIR + f"/{home_id}/"
@@ -44,6 +48,24 @@ def upload_image(master_id: str, np_img: np.ndarray) -> str:
     buff.seek(0)
     result = cloudinary.uploader.upload(buff)
     return result["url"]
+
+def download_image(url) -> np.ndarray:
+    response = requests.get(url)
+
+    # Raise an exception if the request was not successful
+    response.raise_for_status()
+
+    # Open the image using PIL
+    image = Image.open(io.BytesIO(response.content))
+    image = ImageOps.exif_transpose(image)
+
+    assert image is not None
+
+    # Convert the image to a NumPy array
+    image_array = np.array(image)
+
+    return image_array
+
 
 def preprocess(pre_img: bytes | str) -> np.ndarray:
     if type(pre_img) is bytes:

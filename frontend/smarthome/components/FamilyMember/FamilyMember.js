@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 3,
     borderColor: "#FFFFFF",
-    resizeMode: "fit",
-    borderRadius: "50%",
+    resizeMode: "contain",
+    borderRadius: 50,
   },
   listMember: {
     flexDirection: "row",

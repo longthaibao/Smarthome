@@ -1,16 +1,12 @@
-// requiring database
 require("./config/DBconfig");
 require("dotenv").config();
 
-// error
 const AppError = require("./helpers/appError");
 const errorHandler = require("./helpers/errorHandler");
 const headers = require("./helpers/headers");
-
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
 const router = require("./router/index");
 const app = express();
 const port = process.env.port;

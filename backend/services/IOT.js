@@ -33,7 +33,9 @@ module.exports = class IOTService{
 		body: data
 	    });
 
-	    throw new Error(`An error occurred while sending signal to Adafruit IO. Status code: ${response.status}, Reason: ${response.body}`)
+	    if (!response.ok) {
+	      throw new Error(`An error occurred while sending signal to Adafruit IO. Status code: ${response.status}, Reason: ${response.body}`)
+	    }
 	} catch (err) {
 	    console.log(err);
 	}

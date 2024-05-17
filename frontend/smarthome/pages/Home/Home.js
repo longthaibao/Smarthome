@@ -13,7 +13,7 @@ function Home() {
   const fetchMemberLastAccess = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/IOT/lastAuthorization"
+        process.env.EXPO_PUBLIC_BACKEND_URL + "/IOT/lastAuthorization"
       );
       console.log(response.data);
       setLastAccess(response.data);
@@ -23,7 +23,7 @@ function Home() {
   };
   const fetchFamilyMember = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/member/list");
+      const response = await axios.get(process.env.EXPO_PUBLIC_BACKEND_URL + "/member/list");
       setFamilyMember(response.data);
     } catch (error) {
       console.error(error);
@@ -81,8 +81,9 @@ const styles = StyleSheet.create({
   imageAccess: {
     width: "90%",
     height: 350,
-    borderRadius: 20,
-    objectFit: "fit",
+    borderRadius: "20%",
+    objectFit: "contain",
+
   },
   bottomsheet: {
     width: "100%",

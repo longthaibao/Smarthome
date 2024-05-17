@@ -15,7 +15,7 @@ function OpenDoor() {
   const handleOpenDoor = async () => {
     try {
       // Gửi yêu cầu POST lên server
-      const response = await axios.get("http://localhost:8080/IOT/open");
+      const response = await axios.get(process.env.EXPO_PUBLIC_BACKEND_URL + "/IOT/open");
       if (response.status === 200) {
         showToast();
       }

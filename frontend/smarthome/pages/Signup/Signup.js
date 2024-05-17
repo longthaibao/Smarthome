@@ -65,8 +65,7 @@ function Signup() {
       data.append("fullname", fullname);
       try {
         const response = await axios.post(
-          "http://localhost:8080/admin/register",
-          // "http://192.168.2.2:8080/admin/register",
+          process.env.EXPO_PUBLIC_BACKEND_URL + "/admin/register",
           { fullname: fullname, password: password, email: email }
         );
         if (response.status === 200) {

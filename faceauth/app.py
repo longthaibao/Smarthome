@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 import logging
 import os
+
 from services import Notification
 from fastapi import FastAPI, Response, status
 from services import ImageVerification, ImageManager
@@ -33,13 +34,12 @@ app = FastAPI(debug=True, lifespan=lifespan)
 
 @app.post("/register")
 async def register(payload: FaceRegistrationPayload, res: Response):
-    preprocessed = []
+    images = []
 
-    for b64_img in payload.images:
-        preprocessed.append(ImageManager.preprocess(b64_img))
-
+    for url in payload.image_urls:
+        images.append(ImageManager.download_image(url))
     try:
-        ImageVerification.register(payload.master_id, payload.member_id, preprocessed)
+        ImageVerification.register(payload.master_id, payload.member_id, images)
     except ImageVerification.FaceException as e:
         res.status_code = status.HTTP_202_ACCEPTED
         return { "result": "failed", "img": e.img_idx, "reason": e.error_msg }

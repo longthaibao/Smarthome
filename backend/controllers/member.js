@@ -6,49 +6,68 @@ require("dotenv").config();
 
 module.exports = class member {
   static async apiCreatemember(req, res, next) {
-    try {
-      console.log(req.body);
-      if (!req.body) return next(new AppError("No form data found", 404));
+    console.log(req.body)
 
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_NAME,
-        api_key: process.env.CLOUDINARY_KEY,
-        api_secret: process.env.CLOUDINARY_SECRET,
+    if (!req.body) return next(new AppError("No form data found", 404));
+
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUDINARY_KEY,
+      api_secret: process.env.CLOUDINARY_SECRET,
+    });
+
+    try {
+      const myCloud = await new Promise((resolve, reject) => {
+	cloudinary.uploader.upload(
+	  req.body.images,
+	  {
+	    folder: "Face",
+	    // width: 150,
+	    // crop: "scale",
+	  },
+	  (error, result) => {
+	    if (error) res.status(500).json({ error: error });
+	    else resolve(result);
+	  }
+	);
       });
 
-      try {
-        const myCloud = await new Promise((resolve, reject) => {
-          cloudinary.uploader.upload(
-            req.body.images,
-            {
-              folder: "Face",
-              // width: 150,
-              // crop: "scale",
-            },
-            (error, result) => {
-              if (error) res.status(500).json({ error: error });
-              else resolve(result);
-            }
-          );
-        });
+      console.log("myCloud[url] = " + myCloud["url"]);
 
-        console.log(myCloud["url"]);
-        const createdmember = await memberService.creatmember({
-          name: req.body.name,
-          image: myCloud["url"],
-          sex: req.body.sex,
-          relationship: req.body.relationship,
-          age: req.body.age,
-          dateStart: new Date(req.body.dateStart),
-          dateEnd: new Date(req.body.dateEnd),
-        });
-        res.status(200).json(createdmember);
-      } catch (error) {
-        res.status(500).json({ error: error });
+      const createdmember = await memberService.creatmember({
+	  name: req.body.name,  
+	  image: myCloud["url"],
+	  sex: req.body.sex,
+	  relationship: req.body.relationship,
+	  age : req.body.age,
+	  dateStart: new Date(req.body.dateStart),
+	  dateEnd: new Date(req.body.dateEnd),     
+	});
+
+
+      const faceRegResp = await fetch(process.env.FACEAUTH_URL + "/register", {
+	method: "POST",
+	headers: {
+	  "Content-Type": "application/json"
+	},
+	body: JSON.stringify({
+	  "master_id": "nam",
+	  "member_id": createdmember._id,
+	  "image_urls": [ myCloud["url"] ]
+	})
+      });
+      
+      if (faceRegResp.status != 200) {
+	await memberService.deletemember(createdmember._id);
+	const faceRegErr = await faceRegResp.json();
+	res.status(500).json(faceRegErr);
+	return;
       }
-    } catch (error) {
-      res.status(500).json({ error: error });
-    }
+
+	res.status(200).json(createdmember);
+      } catch (error) {
+	res.status(500).json({ error: error });
+      }
   }
 
   static async apiListImagemember(req, res, next) {
